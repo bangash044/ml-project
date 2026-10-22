@@ -1,0 +1,23 @@
+# Python and local environments
+.venv/
+.venv_ml/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.env
+.env.*
+
+# Angular dependencies and build outputs
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+
+# OS / editor
+Thumbs.db
+
+# Large dataset (sample_inputs.csv and the model stay in)
+data/health_lifestyle_classification.csv
+wheels/
+
+# Logs
+*.log

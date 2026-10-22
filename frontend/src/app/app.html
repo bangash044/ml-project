@@ -1,0 +1,44 @@
+<main class="shell">
+  <header><h1>ML Research Prediction Dashboard</h1>
+    <p>Teaching prototype • Health lifestyle classification • CI/CD Demo v1</p></header>
+  @if (deployedStatic) {
+    <aside class="notice">Static GitHub Pages demonstration only.
+      Predictions require Flask and Angular running locally.</aside>
+  }
+  <form (ngSubmit)="submit()">
+    <h2>Model input features ({{fields.length}})</h2>
+    <div class="grid">
+      @for (field of fields; track field.name) {
+        <label>{{field.label}}
+          @if (field.kind === 'number') {
+            <input type="number" step="any" [name]="field.name"
+              [min]="field.min ?? null" [max]="field.max ?? null"
+              [(ngModel)]="values[field.name]" [required]="field.required" />
+          } @else {
+            <select [name]="field.name" [(ngModel)]="values[field.name]"
+              [required]="field.required">
+              <option [ngValue]="null">Select a value</option>
+              @for (option of field.options ?? []; track option) {
+                <option [ngValue]="option">{{option}}</option>
+              }
+            </select>
+          }
+        </label>
+      }
+    </div>
+    <button type="submit" [disabled]="loading || deployedStatic">
+      {{loading ? 'Predicting…' : 'Run local prediction'}}
+    </button>
+  </form>
+  @if (error) { <p class="error" role="alert">{{error}}</p> }
+  @if (result) {
+    <section class="result"><h2>Prediction result</h2>
+      @if (result.label) { <p>Predicted class: <strong>{{result.label}}</strong></p> }
+      <p>Raw prediction: {{result.prediction}}</p>
+      @if (result.probabilities) {
+        <p>Class probabilities (healthy, diseased): {{result.probabilities.join(', ')}}</p>
+      }
+      <p>{{result.disclaimer}}</p>
+    </section>
+  }
+</main>
