@@ -7,7 +7,7 @@
   }
   <form (ngSubmit)="submit()">
     <h2>Model input features ({{fields.length}})</h2>
-    <div class="grid">
+    <div class="grid"> 
       @for (field of fields; track field.name) {
         <label>{{field.label}}
           @if (field.kind === 'number') {

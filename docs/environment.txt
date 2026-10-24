@@ -1,0 +1,5 @@
+git version 2.55.0.windows.3
+node v24.13.1
+npm 11.8.0
+Python 3.12.6
+Angular CLI 21.2.27
