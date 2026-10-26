@@ -32,3 +32,21 @@ def test_predict_invalid_json():
     response = app.test_client().post("/predict", data="not-json",
                                       content_type="application/json")
     assert response.status_code == 400
+
+
+def test_cors_preflight_allows_pages_origin():
+    response = app.test_client().options(
+        "/predict",
+        headers={"Origin": "https://bangash044.github.io",
+                 "Access-Control-Request-Method": "POST",
+                 "Access-Control-Request-Headers": "content-type"})
+    assert response.status_code in (200, 204)
+    assert response.headers.get("Access-Control-Allow-Origin") == "https://bangash044.github.io"
+
+
+def test_cors_blocks_unknown_origin():
+    response = app.test_client().options(
+        "/predict",
+        headers={"Origin": "https://evil.example",
+                 "Access-Control-Request-Method": "POST"})
+    assert "Access-Control-Allow-Origin" not in response.headers

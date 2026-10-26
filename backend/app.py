@@ -2,6 +2,7 @@ from pathlib import Path
 import joblib
 import pandas as pd
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 
 BASE = Path(__file__).resolve().parent
 BUNDLE = joblib.load(BASE / "models/model_bundle.joblib")
@@ -10,7 +11,18 @@ FEATURES = BUNDLE["features"]
 TASK = BUNDLE.get("task", "classification")
 LABELS = BUNDLE.get("labels")
 
+# Websites that are allowed to call this API from a browser
+ALLOWED_ORIGINS = [
+    "https://bangash044.github.io",   # GitHub Pages site (origin has no path)
+    "http://localhost:4200",          # local Angular
+    "http://127.0.0.1:4200",
+]
+
 app = Flask(__name__)
+CORS(app, resources={r"/health": {"origins": ALLOWED_ORIGINS},
+                     r"/predict": {"origins": ALLOWED_ORIGINS}},
+     methods=["GET", "POST", "OPTIONS"], allow_headers=["Content-Type"],
+     max_age=86400)
 
 
 @app.get("/health")
